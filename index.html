@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aqua TV Launcher</title>
+    <style>
+        :root {
+            --clock-opacity: 1.0;       /* شفافية الساعة الكبيرة */
+            --widgets-opacity: 0.95;    /* شفافية الويدجت والبطاقات */
+            --bg-card-color: rgba(21, 31, 56, 0.90); /* لون البطاقات */
+        }
+
+        body {
+            background-color: #050b18;
+            margin: 0;
+            font-family: system-ui, -apple-system, sans-serif;
+            direction: rtl;
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            box-sizing: border-box;
+            padding: 10px;
+        }
+
+        .tv-container {
+            width: 100%;
+            max-width: 1100px;
+            background: #0B132B;
+            border-radius: 16px;
+            padding: 20px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+            border: 2px solid #1E293B;
+        }
+
+        /* الشريط العلوي المصغر */
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #1E293B;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+        .top-left {
+            font-size: 13px;
+            color: #E0E0E0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .top-clock {
+            font-weight: bold;
+            font-size: 15px;
+            color: #fff;
+        }
+        .top-right {
+            display: flex;
+            gap: 8px;
+        }
+        .icon-btn {
+            background: #1E293B;
+            border: none;
+            color: white;
+            padding: 5px 9px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        /* المحتوى الرئيسي (قسمين: يسار ويمين) */
+        .main-content {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            align-items: flex-start;
+        }
+
+        /* الجهه اليسرى */
+        .left-section {
+            flex: 1.1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ساعة ضخمة وواضحة */
+        .large-clock {
+            font-size: 85px;
+            font-weight: 800;
+            line-height: 1;
+            margin-bottom: 10px;
+            color: #ffffff;
+            opacity: var(--clock-opacity);
+            letter-spacing: 1px;
+        }
+
+        /* معلومات عامة مصغرة تحت الساعة مباشرة */
+        .info-card-unified {
+            background: var(--bg-card-color);
+            opacity: var(--widgets-opacity);
+            padding: 12px 16px;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.05);
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .info-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 11.5px;
+            color: #D1D5DB;
+        }
+        .info-row.highlight {
+            color: #FFFFFF;
+            font-weight: bold;
+            font-size: 12px;
+        }
+        .info-row.ramadan-text {
+            color: #FFD700;
+        }
+
+        /* الجهه اليمنى (الويدجت والتبويبات) */
+        .right-section {
+            flex: 1.2;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            opacity: var(--widgets-opacity);
+        }
+
+        .widget {
+            background: var(--bg-card-color);
+            border-radius: 12px;
+            padding: 12px 16px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .forex-widget {
+            color: #00E676;
+            font-weight: bold;
+            font-size: 12px;
+            text-align: center;
+        }
+
+        .tabs-header {
+            display: flex;
+            justify-content: space-around;
+            border-bottom: 1px solid #2A3950;
+            padding-bottom: 6px;
+            font-size: 12px;
+            color: #A0A0A0;
+        }
+        .active-tab {
+            color: #FFFFFF;
+            font-weight: bold;
+            border-bottom: 2px solid #3B82F6;
+        }
+
+        .tabs-body {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+        }
+        .temp-big {
+            font-size: 22px;
+            font-weight: bold;
+            color: #fff;
+        }
+
+        /* شريط التطبيقات السفلي */
+        .favorites-dock {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+            overflow-x: auto;
+            padding-bottom: 5px;
+            opacity: var(--widgets-opacity);
+        }
+
+        .app-item {
+            width: 70px;
+            height: 80px;
+            background: #1E293B;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: 2px solid transparent;
+            flex-shrink: 0;
+        }
+        .app-item:hover {
+            border-color: #3B82F6;
+        }
+
+        .plus {
+            font-size: 20px;
+            font-weight: bold;
+        }
+        .app-icon {
+            font-size: 18px;
+            margin-bottom: 4px;
+        }
+        .app-item span:last-child {
+            font-size: 10px;
+            color: #CBD5E1;
+        }
+    </style>
+</head>
+<body>
+
+<div class="tv-container">
+    <!-- الشريط العلوي المصغر -->
+    <div class="top-bar">
+        <div class="top-left">
+            <span class="top-clock">10:42 AM</span>
+            <span class="weather">• أريحا، الزبيدات 22°C ☀️</span>
+        </div>
+        <div class="top-right">
+            <button class="icon-btn">⚙️</button>
+            <button class="icon-btn">🎛️</button>
+        </div>
+    </div>
+
+    <!-- المحتوى الرئيسي -->
+    <div class="main-content">
+        <!-- القسم الأيسر: الساعة الكبيرة ومعلوماتها المصغرة -->
+        <div class="left-section">
+            <div class="large-clock">10:42</div>
+            
+            <div class="info-card-unified">
+                <div class="info-row highlight">
+                    <span>🕌</span> الصلاة القادمة: العصر بعد 2 ساعة 14 دقيقة
+                </div>
+                <div class="info-row ramadan-text">
+                    <span>🌙</span> متبقي 20 يوماً لشهر رمضان المبارك
+                </div>
+                <div class="info-row">
+                    <span>📅</span> الاثنين، 30 أكتوبر / 15 ربيع الثاني
+                </div>
+                <div class="info-row" style="color: #9CA3AF;">
+                    <span>📍</span> أريحا، الزبيدات • طقس مشمس 22°C
+                </div>
+            </div>
+        </div>
+
+        <!-- القسم الأيمن: الفوركس والويدجت -->
+        <div class="right-section">
+            <div class="widget forex-widget">
+                <span>📈 XAU/USD 2650.40 ▲   USD/ILS 3.72 ▼   EUR/USD 1.08 ▲</span>
+            </div>
+            
+            <div class="widget tabs-widget">
+                <div class="tabs-header">
+                    <span>الأخبار</span>
+                    <span>التقويم</span>
+                    <span>الصلاة</span>
+                    <span>المباريات</span>
+                    <span class="active-tab">الطقس</span>
+                </div>
+                <div class="tabs-body">
+                    <div>
+                        <strong style="font-size: 13px;">أريحا، الزبيدات</strong>
+                        <p style="margin: 3px 0 0; font-size: 10.5px; color: #9CA3AF;">الإحداثيات المحلية مفعلة</p>
+                    </div>
+                    <div class="temp-big">22°C ☀️</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- شريط التطبيقات السفلي -->
+    <div class="favorites-dock">
+        <div class="app-item">
+            <span class="plus">+</span>
+            <span style="font-size:10px; color:#A0A0A0;">إضافة</span>
+        </div>
+        <div class="app-item">
+            <span class="app-icon">🎬</span>
+            <span>نتفليكس</span>
+        </div>
+        <div class="app-item">
+            <span class="app-icon">▶️</span>
+            <span>يوتيوب</span>
+        </div>
+        <div class="app-item">
+            <span class="app-icon">📺</span>
+            <span>شاهد</span>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
